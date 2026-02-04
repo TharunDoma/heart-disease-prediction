@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            background-image: url("https://media.tenor.com/VDeP7omSDuUAAAAM/hardcore-terrorcore.gif");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 30px;
+            color: white;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #aaa;
+        }
+        form {
+            display: inline-block;
+            max-width: 800px;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.9);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin: 0 0 5px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .description {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 5px;
+            font-style: italic;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            box-sizing: border-box;
+        }
+        select {
+            cursor: pointer;
+        }
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .sample-btn {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .sample-btn:hover {
+            background-color: #0b7dda;
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+    <script>
+        function fillSampleData() {
+            // Sample data for a typical patient
+            document.getElementById('feature1').value = 55;  // Age
+            document.getElementById('feature2').value = 1;   // Male
+            document.getElementById('feature3').value = 0;   // Non-smoker
+            document.getElementById('feature4').value = 0;   // Years smoking
+            document.getElementById('feature5').value = 113; // LDL
+            document.getElementById('feature6').value = 2;   // Chest pain type
+            document.getElementById('feature7').value = 162; // Height
+            document.getElementById('feature8').value = 82;  // Weight
+            document.getElementById('feature9').value = 0;   // No family history
+            document.getElementById('feature10').value = 1;  // Active
+            document.getElementById('feature11').value = 2;  // Moderate lifestyle
+            document.getElementById('feature12').value = 0;  // No intervention
+            document.getElementById('feature13').value = 84; // Heart rate
+            document.getElementById('feature14').value = 0;  // No diabetes
+            document.getElementById('feature15').value = 124;// Systolic BP
+            document.getElementById('feature16').value = 75; // Diastolic BP
+            document.getElementById('feature17').value = 0;  // No hypertension
+            document.getElementById('feature18').value = 0;  // No IVSD
+            document.getElementById('feature19').value = 4;  // ECG pattern
+            document.getElementById('feature20').value = 0;  // No Q wave
+        }
+    </script>
+</head>
+<body>
+    <h1>❤️ Heart Disease Prediction System</h1>
+    <p class="subtitle">Fill in the patient information below. Hover over fields for guidance.</p>
+    
+    <form action="/predict" method="post">
+        <button type="button" class="sample-btn" onclick="fillSampleData()">📋 Fill Sample Data (Try it!)</button>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="feature1">Age (years)</label>
+                <div class="description">Patient's age: 20-90 years</div>
+                <input type="number" id="feature1" name="feature1" min="20" max="90" placeholder="e.g., 55" required>
+            </div>
+
+            <div class="form-group">
+                <label for="feature2">Sex</label>
+                <div class="description">Biological sex of patient</div>
+                <select id="feature2" name="feature2" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">Female</option>
+                    <option value="1">Male</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature3">Smoker</label>
+                <div class="description">Does patient smoke?</div>
+                <select id="feature3" name="feature3" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature4">Years of Smoking</label>
+                <div class="description">How many years? (0-50, enter 0 if non-smoker)</div>
+                <input type="number" id="feature4" name="feature4" min="0" max="50" placeholder="e.g., 0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="feature5">LDL Cholesterol (mg/dL)</label>
+                <div class="description">Bad cholesterol level: 26-260 (Normal: <100)</div>
+                <input type="number" id="feature5" name="feature5" min="26" max="260" step="0.1" placeholder="e.g., 113" required>
+            </div>
+
+            <div class="form-group">
+                <label for="feature6">Chest Pain Type</label>
+                <div class="description">Type of chest pain experienced</div>
+                <select id="feature6" name="feature6" required>
+                    <option value="">-- Select --</option>
+                    <option value="1">Type 1 - Typical Angina</option>
+                    <option value="2">Type 2 - Atypical Angina</option>
+                    <option value="3">Type 3 - Non-anginal Pain</option>
+                    <option value="4">Type 4 - Asymptomatic (No Pain)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature7">Height (cm)</label>
+                <div class="description">Patient height: 128-192 cm</div>
+                <input type="number" id="feature7" name="feature7" min="128" max="192" placeholder="e.g., 162" required>
+            </div>
+
+            <div class="form-group">
+                <label for="feature8">Weight (kg)</label>
+                <div class="description">Patient weight: 41-134 kg</div>
+                <input type="number" id="feature8" name="feature8" min="41" max="134" step="0.1" placeholder="e.g., 82" required>
+            </div>
+
+            <div class="form-group">
+                <label for="feature9">Family History</label>
+                <div class="description">Family history of heart disease?</div>
+                <select id="feature9" name="feature9" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature10">Physical Activity</label>
+                <div class="description">Regular physical activity?</div>
+                <select id="feature10" name="feature10" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">No / Sedentary</option>
+                    <option value="1">Yes / Active</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature11">Lifestyle</label>
+                <div class="description">Overall lifestyle quality</div>
+                <select id="feature11" name="feature11" required>
+                    <option value="">-- Select --</option>
+                    <option value="1">Level 1 - Poor</option>
+                    <option value="2">Level 2 - Moderate</option>
+                    <option value="3">Level 3 - Good</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature12">Cardiac Intervention</label>
+                <div class="description">Previous heart procedures/surgery?</div>
+                <select id="feature12" name="feature12" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature13">Heart Rate (bpm)</label>
+                <div class="description">Beats per minute: 40-140 (Normal: 60-100)</div>
+                <input type="number" id="feature13" name="feature13" min="40" max="140" placeholder="e.g., 84" required>
+            </div>
+
+            <div class="form-group">
+                <label for="feature14">Diabetes</label>
+                <div class="description">Diagnosed with diabetes?</div>
+                <select id="feature14" name="feature14" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature15">Systolic BP (mmHg)</label>
+                <div class="description">Top number: 80-220 (Normal: <120)</div>
+                <input type="number" id="feature15" name="feature15" min="80" max="220" placeholder="e.g., 124" required>
+            </div>
+
+            <div class="form-group">
+                <label for="feature16">Diastolic BP (mmHg)</label>
+                <div class="description">Bottom number: 40-140 (Normal: <80)</div>
+                <input type="number" id="feature16" name="feature16" min="40" max="140" placeholder="e.g., 75" required>
+            </div>
+
+            <div class="form-group">
+                <label for="feature17">Hypertension</label>
+                <div class="description">High blood pressure diagnosed?</div>
+                <select id="feature17" name="feature17" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature18">IVSD</label>
+                <div class="description">Interventricular septal defect?</div>
+                <select id="feature18" name="feature18" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature19">ECG Pattern</label>
+                <div class="description">Electrocardiogram pattern type</div>
+                <select id="feature19" name="feature19" required>
+                    <option value="">-- Select --</option>
+                    <option value="1">Pattern 1 - Normal</option>
+                    <option value="2">Pattern 2 - ST-T Wave Abnormality</option>
+                    <option value="3">Pattern 3 - Left Ventricular Hypertrophy</option>
+                    <option value="4">Pattern 4 - Other Abnormality</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="feature20">Q Wave</label>
+                <div class="description">Abnormal Q wave on ECG?</div>
+                <select id="feature20" name="feature20" required>
+                    <option value="">-- Select --</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+        </div>
+
+        <input type="submit" value="🔍 Predict Heart Disease Risk">
+    </form>
+</body>
+</html>
+
